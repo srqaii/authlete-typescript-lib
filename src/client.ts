@@ -452,7 +452,7 @@ export class Authelete3_0 {
     const response = await this.fetchWithTimeout(url, req, timeout, controller).catch(castToError);
     const headersTime = Date.now();
 
-    if (response instanceof Error) {
+    if (response instanceof globalThis.Error) {
       const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
       if (options.signal?.aborted) {
         throw new Errors.APIUserAbortError();
@@ -759,7 +759,7 @@ export class Authelete3_0 {
         // Preserve legacy string encoding behavior for now
         headers.values.has('content-type')) ||
       // `Blob` is superset of `File`
-      body instanceof Blob ||
+      ((globalThis as any).Blob && body instanceof (globalThis as any).Blob) ||
       // `FormData` -> `multipart/form-data`
       body instanceof FormData ||
       // `URLSearchParams` -> `application/x-www-form-urlencoded`
@@ -813,6 +813,7 @@ export class Authelete3_0 {
   misc: API.Misc = new API.Misc(this);
   vci: API.Vci = new API.Vci(this);
 }
+
 Authelete3_0.Service = Service;
 Authelete3_0.Client = Client;
 Authelete3_0.Auth = Auth;
@@ -827,6 +828,7 @@ Authelete3_0.Info = Info;
 Authelete3_0.HskResource = HskResource;
 Authelete3_0.Misc = Misc;
 Authelete3_0.Vci = Vci;
+
 export declare namespace Authelete3_0 {
   export type RequestOptions = Opts.RequestOptions;
 
