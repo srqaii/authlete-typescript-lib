@@ -276,18 +276,19 @@ export class Authelete3_0 {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    return;
+    if (this.apiKey && values.get('authorization')) {
+      return;
+    }
+    if (nulls.has('authorization')) {
+      return;
+    }
+
+    throw new Error(
+      'Could not resolve authentication method. Expected the apiKey to be set. Or for the "Authorization" headers to be explicitly omitted',
+    );
   }
 
   protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    return buildHeaders([await this.authleteAuth(opts), await this.bearerAuth(opts)]);
-  }
-
-  protected async authleteAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    return undefined;
-  }
-
-  protected async bearerAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
     if (this.apiKey == null) {
       return undefined;
     }
